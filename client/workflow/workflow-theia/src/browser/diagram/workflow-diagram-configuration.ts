@@ -17,7 +17,7 @@ import "sprotty-theia/css/theia-sprotty.css";
 
 import { createWorkflowDiagramContainer } from "@eclipse-glsp-examples/workflow-sprotty/lib";
 import { CommandPalette, TYPES } from "@eclipse-glsp/client";
-import { GLSPTheiaDiagramServer, TheiaCommandPalette } from "@eclipse-glsp/theia-integration/lib/browser";
+import { TheiaCommandPalette } from "@eclipse-glsp/theia-integration/lib/browser";
 import {
     connectTheiaDiagramService,
     TheiaContextMenuServiceFactory
@@ -28,6 +28,7 @@ import { DiagramConfiguration, TheiaDiagramServer, TheiaSprottySelectionForwarde
 import { TheiaContextMenuService } from "sprotty-theia/lib/sprotty/theia-sprotty-context-menu-service";
 
 import { WorkflowLanguage } from "../../common/workflow-language";
+import { WorkflowDiagramServer } from "./workflow-diagram-server";
 
 @injectable()
 export class WorkflowDiagramConfiguration implements DiagramConfiguration {
@@ -39,8 +40,8 @@ export class WorkflowDiagramConfiguration implements DiagramConfiguration {
 
     createContainer(widgetId: string): Container {
         const container = createWorkflowDiagramContainer(widgetId);
-        container.bind(TYPES.ModelSource).to(GLSPTheiaDiagramServer).inSingletonScope();
-        container.bind(TheiaDiagramServer).toService(GLSPTheiaDiagramServer);
+        container.bind(TYPES.ModelSource).to(WorkflowDiagramServer).inSingletonScope();
+        container.bind(TheiaDiagramServer).toService(WorkflowDiagramServer);
         // container.rebind(KeyTool).to(TheiaKeyTool).inSingletonScope()
         container.bind(TYPES.IActionHandlerInitializer).to(TheiaSprottySelectionForwarder);
         container.bind(SelectionService).toConstantValue(this.selectionService);
